@@ -1,0 +1,73 @@
+name: Publish to GitHub Packages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Build and publish to GitHub Packages
+        run: |
+          ./gradlew build
+          ./gradlew publish
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: peavers
+          REPOSITORY: utils
+
+      - name: Get latest version
+        id: latest-version
+        uses: dorny/versions-lister-action@v1
+        with:
+          owner: ${{ env.USERNAME }}
+          repository: ${{ env.REPOSITORY }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          package_type: maven
+          package_name: <your-library-name>
+
+      - name: Increment version if no latest version found
+        run: |
+          if [ -z "${{ steps.latest-version.outputs.latest }}" ]; then
+            echo "No latest version found, incrementing patch version"
+            VERSION=$(./gradlew printVersion | awk -F - '{print $1"-"$2+1}')
+            echo "::set-env name=VERSION::$VERSION"
+          fi
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        if: steps.latest-version.outputs.latest != ''
+        with:
+          tag_name: ${{ steps.latest-version.outputs.latest }}
+          release_name: ${{ steps.latest-version.outputs.latest }}
+          body: |
+            Release of version ${{ steps.latest-version.outputs.latest }}.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release if no latest version found
+        uses: actions/create-release@v1
+        if: steps.latest-version.outputs.latest == ''
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: ${{ env.VERSION }}
+          body: |
+            Release of version ${{ env.VERSION }}.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
