@@ -1,0 +1,52 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id "io.freefair.lombok" version "6.6.3"
+}
+
+group 'io.github.peavers'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Resilience
+    implementation "io.github.resilience4j:resilience4j-all:2.0.2"
+
+    // Apache
+    implementation 'org.apache.commons:commons-text:1.10.0'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'commons-io:commons-io:2.11.0'
+
+    // Logging
+    implementation 'org.slf4j:slf4j-api:2.0.6'
+
+    // Test
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.mockito:mockito-core:5.2.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/peavers/utils")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
