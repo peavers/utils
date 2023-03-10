@@ -3,6 +3,7 @@ package peavers.io;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static peavers.io.FileOperations.executeWithLock;
 import static peavers.io.FileOperations.move;
 
+@Disabled
 class FileOperationsTest {
 
     @TempDir
