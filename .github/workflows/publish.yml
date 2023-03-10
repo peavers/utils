@@ -21,10 +21,15 @@ jobs:
         with:
           java-version: 17
 
+      - name: Set up Gradle
+        uses: gradle/wrapper-action@v2
+        with:
+          gradle-version: '7.4'
+
       - name: Build and publish to GitHub Packages
         run: |
           ./gradlew build
-          ./gradlew publish
+          ./gradlew publish -PmavenUsername=${{ github.actor }} -PmavenPassword=${{ secrets.GITHUB_TOKEN }}
 
       - name: Get latest tag
         id: latest-tag
@@ -37,13 +42,13 @@ jobs:
           fi
           echo "::set-output name=latest_tag::$latest_tag"
 
-      - name: Create GitHub Release
+      - name: Create GitHub release
         uses: actions/create-release@v1
-        if: steps.latest-tag.outputs.latest_tag != ''
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' && contains(github.ref, 'tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.latest-tag.outputs.latest_tag }}
-          release_name: ${{ steps.latest-tag.outputs.latest_tag }}
-          body: |
-            Release of version ${{ steps.latest-tag.outputs.latest_tag }}.
+          release_name: Release ${{ steps.latest-tag.outputs.latest_tag }}
           draft: false
           prerelease: false
