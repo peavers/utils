@@ -3,7 +3,7 @@ name: Publish to GitHub Packages
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   publish:
@@ -30,13 +30,13 @@ jobs:
 
       - name: Get latest version
         id: latest-version
-        uses: dorny/versions-lister-action@v1
-        with:
-          owner: ${{ env.USERNAME }}
-          repository: ${{ env.REPOSITORY }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          package_type: maven
-          package_name: <your-library-name>
+        run: |
+          echo "::set-output name=latest::$(curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/${{ env.USERNAME }}/${{ env.REPOSITORY }}/packages/maven/${{ env.REPOSITORY }}/versions | jq -r '.[0].name')"
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: peavers
+          REPOSITORY: utils
 
       - name: Increment version if no latest version found
         run: |
