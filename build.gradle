@@ -1,4 +1,5 @@
 plugins {
+    id 'idea'
     id 'java-library'
     id 'maven-publish'
     id "io.freefair.lombok" version "6.6.3"
@@ -7,6 +8,7 @@ plugins {
 }
 
 group 'io.github.peavers'
+description = 'Collection of things'
 
 repositories {
     mavenCentral()
@@ -41,6 +43,15 @@ java {
 sonar {
     properties {
         property "sonar.projectKey", "peavers-utils"
+    }
+}
+
+normalization {
+    runtimeClasspath {
+        metaInf {
+            ignoreAttribute("Build-Time")
+            ignoreAttribute("Build-Date")
+        }
     }
 }
 
