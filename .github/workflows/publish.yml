@@ -46,3 +46,11 @@ jobs:
           arguments: -Pversion=${{steps.compute_version.outputs.version}} publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish tag
+        uses: pkgdeps/git-tag-action@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_repo: ${{ github.repository }}
+          git_commit_sha: ${{ github.sha }}
+          version: ${{steps.compute_version.outputs.version}}
