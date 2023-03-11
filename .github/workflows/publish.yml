@@ -27,6 +27,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Bump version
+        uses: chkfung/android-version-actions@v1.2.1
+        with:
+          gradlePath: build.gradle
+          versionCode: ${{github.run_number}}
+          versionName: 0.0.1
+
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
 
