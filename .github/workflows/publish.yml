@@ -32,6 +32,9 @@ jobs:
           ./gradlew build
           ./gradlew publish -PmavenUsername=${{ github.actor }} -PmavenPassword=${{ secrets.GITHUB_TOKEN }}
 
+      - name: Fetch tags
+        run: git fetch --tags
+
       - name: Get latest tag
         id: latest-tag
         run: |
