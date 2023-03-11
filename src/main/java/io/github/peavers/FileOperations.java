@@ -1,4 +1,4 @@
-package peavers.io;
+package io.github.peavers;
 
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
@@ -86,7 +86,7 @@ public class FileOperations {
 
         final Callable<Boolean> callable = () -> {
             try (final FileChannel sourceChannel = FileChannel.open(toLock, StandardOpenOption.READ,
-                    StandardOpenOption.WRITE)) {
+                StandardOpenOption.WRITE)) {
                 final FileLock lock = sourceChannel.tryLock();
 
                 if (lock == null) {
