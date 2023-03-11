@@ -33,7 +33,16 @@ test {
     useJUnitPlatform()
 }
 
+java {
+    withSourcesJar()
+}
+
 publishing {
+    publications {
+        javaLibrary(MavenPublication) {
+            from(project.components.java)
+        }
+    }
     repositories {
         maven {
             name = "GitHubPackages"
@@ -42,11 +51,6 @@ publishing {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
             }
-        }
-    }
-    publications {
-        gpr(MavenPublication) {
-            from(components.java)
         }
     }
 }

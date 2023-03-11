@@ -42,9 +42,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fetch all tags
-        run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-
       - name: Publish package
         uses: gradle/gradle-build-action@v2.4.0
         with:
