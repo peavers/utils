@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id "io.freefair.lombok" version "6.6.3"
+    id 'fr.brouillard.oss.gradle.jgitver' version '0.9.1'
 }
 
 group 'io.github.peavers'
