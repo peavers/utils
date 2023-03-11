@@ -6,7 +6,6 @@ plugins {
 }
 
 group 'io.github.peavers'
-version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
