@@ -2,7 +2,7 @@ plugins {
     id 'idea'
     id 'java-library'
     id 'maven-publish'
-    id "io.freefair.lombok" version "6.6.3"
+    id "io.freefair.lombok" version "8.0.1"
     id 'fr.brouillard.oss.gradle.jgitver' version '0.9.1'
     id "org.sonarqube" version "3.5.0.2730"
 }
